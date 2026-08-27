@@ -21,6 +21,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:types": "vue-tsc --noEmit && vue-tsc --noEmit -p playground/tsconfig.json",
+    "changelog": "changelogen",
+    "release:prepare": "changelogen --bump",
     "docs:dev": "npm --prefix docs run dev",
     "docs:build": "npm --prefix docs run build"
   },
@@ -40,6 +42,7 @@
     "@nuxt/schema": "^4.5.0",
     "@nuxt/test-utils": "^4.1.0",
     "@types/node": "^24.0.0",
+    "changelogen": "^0.6.2",
     "eslint": "^10.0.0",
     "ioredis": "^5.7.0",
     "nuxt": "^4.5.0",
