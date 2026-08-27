@@ -1,17 +1,32 @@
 {
   "name": "nuxt-maintainer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Laravel-inspired maintenance mode for Nuxt applications",
-  "repository": { "type": "git", "url": "git+https://github.com/roncallyt/nuxt-maintainer.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roncallyt/nuxt-maintainer.git"
+  },
   "homepage": "https://nuxt-maintainer.t7n.dev",
   "license": "MIT",
   "type": "module",
-  "exports": { ".": { "types": "./dist/module.d.mts", "import": "./dist/module.mjs" } },
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.mts",
+      "import": "./dist/module.mjs"
+    }
+  },
   "main": "./dist/module.mjs",
   "types": "./dist/module.d.mts",
-  "bin": { "nuxt-maintainer": "./bin/nuxt-maintainer.mjs" },
-  "files": ["dist", "bin"],
-  "engines": { "node": ">=20.19.0" },
+  "bin": {
+    "nuxt-maintainer": "./bin/nuxt-maintainer.mjs"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "prepack": "node scripts/clean-build.mjs && nuxt-module-build build",
     "dev": "nuxi dev playground",
@@ -34,8 +49,14 @@
     "pathe": "^2.0.3",
     "unstorage": "^1.17.3"
   },
-  "peerDependencies": { "ioredis": "^5.0.0" },
-  "peerDependenciesMeta": { "ioredis": { "optional": true } },
+  "peerDependencies": {
+    "ioredis": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@nuxt/eslint-config": "^1.11.0",
     "@nuxt/module-builder": "^1.0.2",
