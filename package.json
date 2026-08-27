@@ -1,0 +1,50 @@
+{
+  "name": "nuxt-maintainer",
+  "version": "1.0.0",
+  "description": "Laravel-inspired maintenance mode for Nuxt applications",
+  "repository": { "type": "git", "url": "git+https://github.com/roncallyt/nuxt-maintainer.git" },
+  "homepage": "https://nuxt-maintainer.t7n.dev",
+  "license": "MIT",
+  "type": "module",
+  "exports": { ".": { "types": "./dist/module.d.mts", "import": "./dist/module.mjs" } },
+  "main": "./dist/module.mjs",
+  "types": "./dist/module.d.mts",
+  "bin": { "nuxt-maintainer": "./bin/nuxt-maintainer.mjs" },
+  "files": ["dist", "bin"],
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "prepack": "node scripts/clean-build.mjs && nuxt-module-build build",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:types": "vue-tsc --noEmit && vue-tsc --noEmit -p playground/tsconfig.json",
+    "docs:dev": "npm --prefix docs run dev",
+    "docs:build": "npm --prefix docs run build"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.5.0",
+    "citty": "^0.2.0",
+    "consola": "^3.4.2",
+    "defu": "^6.1.4",
+    "pathe": "^2.0.3",
+    "unstorage": "^1.17.3"
+  },
+  "peerDependencies": { "ioredis": "^5.0.0" },
+  "peerDependenciesMeta": { "ioredis": { "optional": true } },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^1.11.0",
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.5.0",
+    "@nuxt/test-utils": "^4.1.0",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.0.0",
+    "ioredis": "^5.7.0",
+    "nuxt": "^4.5.0",
+    "typescript": "^6.0.0",
+    "vitest": "^4.0.0",
+    "vue-tsc": "^3.2.0"
+  }
+}

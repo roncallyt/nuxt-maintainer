@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      REDIS_URL: redis://127.0.0.1:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+      - run: npm ci
+      - run: npm run dev:prepare
+      - run: npm run lint
+      - run: npm run test:types
+      - run: npm test
+      - run: npm run prepack
+      - run: npm pack --dry-run
+
+  compatibility:
+    strategy:
+      matrix:
+        include:
+          - nuxt: '^3.21.0'
+            node: 20.19.0
+          - nuxt: '^4.5.0'
+            node: 22.19.0
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false "nuxt@${{ matrix.nuxt }}"
+      - run: npm run dev:prepare
+      - run: npm test

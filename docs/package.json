@@ -1,0 +1,7 @@
+{
+  "name": "nuxt-maintainer-docs",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "nuxt dev", "build": "nuxt build", "generate": "nuxt generate" },
+  "dependencies": { "better-sqlite3": "^12.0.0", "docus": "^5.12.3", "nuxt": "^4.5.0" }
+}
