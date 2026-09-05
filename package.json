@@ -1,6 +1,6 @@
 {
   "name": "nuxt-maintainer",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Laravel-inspired maintenance mode for Nuxt applications",
   "repository": {
     "type": "git",
