@@ -43,6 +43,22 @@ describe.sequential('running application', async () => {
     expect(html).not.toContain('Existing error page')
   })
 
+  it('composes maintenance error fields with custom and default child renderers', async () => {
+    await putSite({ message: 'Compound maintenance', retryAfter: 120, refresh: 30 })
+    const response = await fetch('/compound', { headers: { accept: 'text/html' } })
+    const html = await response.text()
+
+    expect(response.status).toBe(503)
+    expect(html).toContain('id="compound-error"')
+    expect(html).toContain('<h2>Custom maintenance title</h2>')
+    expect(html).toContain('id="custom-message"')
+    expect(html).toContain('Compound maintenance')
+    expect(html).toContain('This page will refresh in 30 seconds.')
+    expect(html).toContain('Maintenance began <time datetime="2026-08-26T00:00:00.000Z">')
+    expect(html).toContain('id="custom-retry" value="120"')
+    expect(html).not.toContain('<h1>Temporarily unavailable</h1>')
+  })
+
   it('returns a tagged structured JSON 503 for APIs', async () => {
     await putSite({ message: 'API maintenance' })
     const response = await fetch('/api/ping', { headers: { accept: 'application/json' } })

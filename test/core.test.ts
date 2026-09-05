@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+import { ref } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { useNuxtMaintenanceError } from '../src/runtime/composables/useNuxtMaintenanceError'
 import { isMaintenanceError } from '../src/runtime/core/error'
 import { matchesRoutePattern } from '../src/runtime/core/routes'
 import { bypassCookieValue, constantEqual, hashSecret } from '../src/runtime/core/secret'
@@ -64,5 +66,36 @@ describe('maintenance errors', () => {
     expect(isMaintenanceError({ cause: error })).toBe(true)
     expect(isMaintenanceError({ data: JSON.stringify(error.data) })).toBe(true)
     expect(isMaintenanceError({ statusCode: 503 })).toBe(false)
+  })
+
+  it('exposes reactive typed maintenance state without fetching', () => {
+    const fetch = vi.spyOn(globalThis, 'fetch')
+    const error = ref<unknown>({
+      data: {
+        code: 'NUXT_MAINTAINER',
+        maintenance: {
+          down: true,
+          message: 'Deploying',
+          since: '2026-08-26T00:00:00.000Z',
+          retryAfter: 120,
+          refresh: 30,
+        },
+      },
+    })
+    const maintenance = useNuxtMaintenanceError(error)
+
+    expect(maintenance.state.value?.down).toBe(true)
+    expect(maintenance.message.value).toBe('Deploying')
+    expect(maintenance.since.value).toBe('2026-08-26T00:00:00.000Z')
+    expect(maintenance.retryAfter.value).toBe(120)
+    expect(maintenance.refresh.value).toBe(30)
+
+    error.value = { data: { code: 'NUXT_MAINTAINER', maintenance: { down: true, message: 'Updated' } } }
+    expect(maintenance.message.value).toBe('Updated')
+
+    error.value = { data: { code: 'NUXT_MAINTAINER', maintenance: { down: 'yes' } } }
+    expect(maintenance.state.value).toBeNull()
+    expect(fetch).not.toHaveBeenCalled()
+    fetch.mockRestore()
   })
 })

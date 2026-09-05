@@ -1,22 +1,35 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { getMaintenanceErrorData } from '../core/error'
+import { provide } from 'vue'
+import { useNuxtMaintenanceError } from '../composables/useNuxtMaintenanceError'
+import NuxtMaintenanceErrorMessage from './NuxtMaintenanceErrorMessage.vue'
+import NuxtMaintenanceErrorSince from './NuxtMaintenanceErrorSince.vue'
+import NuxtMaintenanceErrorTitle from './NuxtMaintenanceErrorTitle.vue'
+import { maintenanceErrorContextKey } from './maintenance-error-context'
 
 const props = defineProps<{ error: unknown }>()
-const maintenance = computed(() => getMaintenanceErrorData(props.error)?.maintenance as { message?: string, since?: string } | undefined)
+const context = useNuxtMaintenanceError(() => props.error)
+const { state, message, since, retryAfter, refresh } = context
+
+provide(maintenanceErrorContextKey, context)
 </script>
 
 <template>
-  <main
-    v-if="maintenance"
-    role="main"
-  >
-    <h1>Temporarily unavailable</h1>
-    <p role="status">
-      {{ maintenance.message }}
-    </p>
-    <p v-if="maintenance.since">
-      Maintenance began <time :datetime="maintenance.since">{{ maintenance.since }}</time>.
-    </p>
-  </main>
+  <template v-if="state">
+    <slot
+      v-if="$slots.default"
+      :state="state"
+      :message="message"
+      :since="since"
+      :retry-after="retryAfter"
+      :refresh="refresh"
+    />
+    <main
+      v-else
+      role="main"
+    >
+      <NuxtMaintenanceErrorTitle />
+      <NuxtMaintenanceErrorMessage />
+      <NuxtMaintenanceErrorSince />
+    </main>
+  </template>
 </template>

@@ -9,7 +9,13 @@ const genericError = computed(() => props.error as { statusCode?: number, messag
       <NuxtMaintenanceError
         v-if="isMaintenanceError(props.error)"
         :error="props.error"
-      />
+      >
+        <NuxtMaintenanceErrorTitle />
+        <NuxtMaintenanceErrorMessage />
+        <NuxtMaintenanceErrorSince />
+        <NuxtMaintenanceErrorRetryAfter />
+        <NuxtMaintenanceErrorRefresh />
+      </NuxtMaintenanceError>
       <template v-else>
         <p class="eyebrow">
           Application error
