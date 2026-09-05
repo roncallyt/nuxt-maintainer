@@ -4,6 +4,8 @@ import { defu } from 'defu'
 import type { ModuleOptions } from './types'
 import { DEFAULT_KEY_PREFIX, DEFAULT_MESSAGE, DEFAULT_MOUNT, DEFAULT_SECTION_MESSAGE } from './runtime/core/state'
 
+export type { UseNuxtMaintenanceErrorReturn } from './runtime/composables/useNuxtMaintenanceError'
+export type { NuxtMaintenanceErrorData, NuxtMaintenanceErrorLike } from './runtime/core/error'
 export type { MaintenanceRecord, MaintenanceStatus, ModuleOptions, PublicMaintenanceState, StorageOptions } from './types'
 export { isMaintenanceError } from './runtime/core/error'
 
@@ -49,9 +51,15 @@ export default defineNuxtModule<ModuleOptions>({
     addRouteMiddleware({ name: 'nuxt-maintainer', path: resolver.resolve('./runtime/middleware/maintenance'), global: true }, { prepend: true })
     addImports([
       { name: 'useNuxtMaintenance', from: resolver.resolve('./runtime/composables/useNuxtMaintenance') },
+      { name: 'useNuxtMaintenanceError', from: resolver.resolve('./runtime/composables/useNuxtMaintenanceError') },
       { name: 'isMaintenanceError', from: resolver.resolve('./runtime/utils/error') },
     ])
     addComponent({ name: 'NuxtMaintenance', filePath: resolver.resolve('./runtime/components/NuxtMaintenance.vue') })
     addComponent({ name: 'NuxtMaintenanceError', filePath: resolver.resolve('./runtime/components/NuxtMaintenanceError.vue') })
+    addComponent({ name: 'NuxtMaintenanceErrorTitle', filePath: resolver.resolve('./runtime/components/NuxtMaintenanceErrorTitle.vue') })
+    addComponent({ name: 'NuxtMaintenanceErrorMessage', filePath: resolver.resolve('./runtime/components/NuxtMaintenanceErrorMessage.vue') })
+    addComponent({ name: 'NuxtMaintenanceErrorSince', filePath: resolver.resolve('./runtime/components/NuxtMaintenanceErrorSince.vue') })
+    addComponent({ name: 'NuxtMaintenanceErrorRetryAfter', filePath: resolver.resolve('./runtime/components/NuxtMaintenanceErrorRetryAfter.vue') })
+    addComponent({ name: 'NuxtMaintenanceErrorRefresh', filePath: resolver.resolve('./runtime/components/NuxtMaintenanceErrorRefresh.vue') })
   },
 })
